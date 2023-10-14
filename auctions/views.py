@@ -1,19 +1,32 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import AuctionListingForm
-from .models import User
+from .models import User, AuctionListing
 
 
 def index(request):
     return render(request, "auctions/index.html")
 
 def create_listing(request):
-    form = AuctionListingForm
+    errors = None
+    if request.method == 'POST':
+        user = User
+        form = AuctionListingForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+        else:
+            errors = form.errors
+            return redirect('create_listing')
+    else:
+        form = AuctionListingForm()        
+
     return render(request, "auctions/create_listing.html", {
-        "form": form
+        "form": form,
+        "errors": errors
     })
 
 
