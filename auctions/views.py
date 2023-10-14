@@ -3,12 +3,18 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+from .forms import AuctionListingForm
 from .models import User
 
 
 def index(request):
     return render(request, "auctions/index.html")
+
+def create_listing(request):
+    form = AuctionListingForm
+    return render(request, "auctions/create_listing.html", {
+        "form": form
+    })
 
 
 def login_view(request):
