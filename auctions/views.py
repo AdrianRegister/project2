@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -10,17 +11,17 @@ from .models import User, AuctionListing
 def index(request):
     return render(request, "auctions/index.html")
 
+@login_required
 def create_listing(request):
     errors = None
     if request.method == 'POST':
-        user = User
-        form = AuctionListingForm(request.POST, instance=user)
+        form = AuctionListingForm(request.POST)
         if form.is_valid():
+            form.instance.listed_by = request.user
             form.save()
             return redirect('index')
         else:
             errors = form.errors
-            return redirect('create_listing')
     else:
         form = AuctionListingForm()        
 
