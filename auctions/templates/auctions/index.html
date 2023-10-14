@@ -3,5 +3,16 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    IN PROGRESS
+
+    <ul>
+        {% for listing in listings %}
+        <li>
+            <div>{{ listing.listing_name }} </div>
+            <div>{{ listing.listing_description }}</div>
+            <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div>
+        </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
