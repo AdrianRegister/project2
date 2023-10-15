@@ -26,3 +26,13 @@ class ListingComment(models.Model):
     comment_text = models.TextField(max_length=1024)
     on_listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     made_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Comment from {self.made_by} on {self.on_listing}"
+    
+class Watchlist(models.Model):
+    watchlist_owned_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    item_watched = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.item_watched} being watched by {self.watchlist_owned_by}"

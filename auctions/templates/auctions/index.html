@@ -2,15 +2,17 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    IN PROGRESS
+    <br>
 
     <ul>
         {% for listing in listings %}
         <li>
-            <div>{{ listing.listing_name }} </div>
+            <div>
+                <a href="{% url 'listing_info' listing.listing_name %}">{{ listing.listing_name }}</a> 
+            </div>
             <div>{{ listing.listing_description }}</div>
             <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div>
+            <br>
         </li>
         {% endfor %}
     </ul>

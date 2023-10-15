@@ -1,0 +1,30 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>My Watchlist</h2><br>
+
+    {% for watched_item in watched_items %}
+
+    <form action="{% url 'my_watchlist' %}" method="post">
+        {% csrf_token %}
+    <ul>
+        <li>
+            <div><a href="{% url 'listing_info' watched_item.item_watched.listing_name %}">{{ watched_item.item_watched.listing_name }}</a></div>
+            <div>{{ watched_item.item_watched.listing_description }}</div>
+            <div>Starting price: ${{ watched_item.item_watched.starting_price }}. Listing posted by {{ watched_item.item_watched.listed_by }}.</div><br>
+        </li>
+        <input type="submit" name="remove_from_watchlist" value="Remove from My Watchlist">
+        <input type="hidden" name="watched_item_id" value="{{ watched_item.id }}">
+    </ul>
+
+    </form>
+    {% endfor %}
+
+    {% if not watched_items %}
+    Watchlist empty!
+    {% else %}
+    
+    {% endif %}
+
+{% endblock %}

@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import AuctionListingForm
-from .models import User, AuctionListing, ListingBid, ListingComment
+from .models import User, AuctionListing, Watchlist
 
 
 def index(request):
@@ -32,6 +32,28 @@ def create_listing(request):
         "errors": errors
     })
 
+def listing_info(request, listing_name):
+    listing = AuctionListing.objects.get(listing_name=listing_name)
+    if request.method == 'POST':
+        watchlist_item = Watchlist.objects.create(watchlist_owned_by=request.user, item_watched=listing) 
+        watchlist_item.save()
+        return redirect('my_watchlist')
+                   
+    return render(request, "auctions/listing_info.html", {
+        "listing_name": listing_name,
+        "listing": listing
+    })
+
+def my_watchlist(request):   
+    if request.method == 'POST':
+        watched_item_id = request.POST.get('watched_item_id')
+        item_to_remove = Watchlist.objects.get(id=watched_item_id)
+        item_to_remove.delete()
+        return redirect(my_watchlist)
+
+    return render(request, "auctions/my_watchlist.html", {
+        "watched_items": Watchlist.objects.all()
+    })
 
 def login_view(request):
     if request.method == "POST":

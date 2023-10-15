@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Listing Information</h2>
+    <br>
+    <h2>{{ listing_name }}</h2>
+
+    
+    <form action="{% url 'listing_info' listing_name %}" method="post">
+        {% csrf_token %}
+
+    <div>{{ listing.listing_description }}</div>
+    <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div><br>
+
+    <input type="submit" name="add_to_watchlist" value="Add to My Watchlist">
+
+    </form>
+
+{% endblock %}
