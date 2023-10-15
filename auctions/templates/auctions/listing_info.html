@@ -6,15 +6,32 @@
     <br>
     <h2>{{ listing_name }}</h2>
 
-    
-    <form action="{% url 'listing_info' listing_name %}" method="post">
+{% if not user.is_authenticated %}
+
+    <div>{{ listing.listing_description }}</div>
+    <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div><br>
+    <div>Please log in to add to watchlist!</div>
+
+{% else %}
+    <form action="{% url 'listing_info' listing_name %}" method="post" name="add_to_watchlist_form">
         {% csrf_token %}
 
     <div>{{ listing.listing_description }}</div>
     <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div><br>
+    
+    {% if listing.current_price == null %}
+        <div>No bids yet!</div>
+    {% else %}
+        <div>Current price: ${{ listing.current_price }}</div>  
+    {% endif %}  
+    <br>
 
     <input type="submit" name="add_to_watchlist" value="Add to My Watchlist">
+    </form><br>
+    <a href="{% url 'bidding_page' listing_name %}">Bid on this item</a>
 
-    </form>
+{% endif %}
+    
 
 {% endblock %}
+

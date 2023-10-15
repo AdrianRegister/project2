@@ -8,6 +8,7 @@ class User(AbstractUser):
 class AuctionListing(models.Model):
     listing_name = models.CharField(max_length=64)
     starting_price = models.DecimalField(max_digits=6, decimal_places=2)
+    current_price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     listed_by = models.ForeignKey(User, on_delete=models.CASCADE)
     listing_description = models.TextField(max_length=5120)
 
@@ -20,7 +21,7 @@ class ListingBid(models.Model):
     bidder_name = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.id}: {self.bid_amount} on {self.for_listing}"
+        return f"${self.bid_amount} on {self.for_listing} by {self.bidder_name}"
 
 class ListingComment(models.Model):
     comment_text = models.TextField(max_length=1024)

@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Place a bid on {{ listing.listing_name }}!</h2>
+    <br>
+
+    {% if error_message %}
+        <strong>{{ error_message }}</strong>
+    {% endif %}   
+
+    <form action="{% url 'bidding_page' listing.listing_name %}" method="post" name="place_bid_form">
+        {% csrf_token %}
+
+    <div>{{ listing.listing_description }}</div>
+    <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div><br>
+    
+    {% if listing.current_price == null %}
+        <div>No bids yet!</div>
+    {% else %}
+        <div>Current price: ${{ listing.current_price }}</div>   
+    {% endif %}  
+    <br>
+    {{ bid_form }}
+    <input type="submit" name="place_bid" value="Place bid">
+    </form><br>
+
+{% endblock %}

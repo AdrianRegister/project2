@@ -13,6 +13,14 @@
             <div><a href="{% url 'listing_info' watched_item.item_watched.listing_name %}">{{ watched_item.item_watched.listing_name }}</a></div>
             <div>{{ watched_item.item_watched.listing_description }}</div>
             <div>Starting price: ${{ watched_item.item_watched.starting_price }}. Listing posted by {{ watched_item.item_watched.listed_by }}.</div><br>
+            
+            {% if listing.current_price == null %}
+                <div>No bids yet!</div>
+            {% else %}
+                <div>Current price: ${{ listing.current_price }}</div>  
+            {% endif %}  
+            <br>
+        
         </li>
         <input type="submit" name="remove_from_watchlist" value="Remove from My Watchlist">
         <input type="hidden" name="watched_item_id" value="{{ watched_item.id }}">
