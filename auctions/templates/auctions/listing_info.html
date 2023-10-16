@@ -10,7 +10,12 @@
 
     <div>{{ listing.listing_description }}</div>
     <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div><br>
-    <div>Please log in to add to watchlist!</div>
+    <div>Please log in to add to watchlist or place a bid!</div>
+
+    <hr>
+    <h4>Comments</h4>
+
+    Please sign in to see or add comments!
 
 {% else %}
     <form action="{% url 'listing_info' listing_name %}" method="post" name="add_to_watchlist_form">
@@ -19,16 +24,48 @@
     <div>{{ listing.listing_description }}</div>
     <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div><br>
     
-    {% if listing.current_price == null %}
+    {% if listing.current_price == 0.00 %}
         <div>No bids yet!</div>
     {% else %}
-        <div>Current price: ${{ listing.current_price }}</div>  
+        <div>Current price: ${{ listing.current_price }}. Bid placed by {{ highest_bidder }}</div>  
     {% endif %}  
     <br>
 
     <input type="submit" name="add_to_watchlist" value="Add to My Watchlist">
     </form><br>
+
+    {% if not listing.is_closed %}
+
     <a href="{% url 'bidding_page' listing_name %}">Bid on this item</a>
+
+        {% if listing.listed_by == request.user %}
+        <form action ="{% url 'listing_info' listing_name %}" method="post" name="close_auction_form">
+            {% csrf_token %}
+            <input type="submit" name="close_auction" value="Close the Auction!">
+        </form>
+        {% endif %}
+      
+        {% elif not request.user == highest_bidder %}    
+            <strong>Auction closed! Auction won by {{ highest_bidder }}</strong> 
+        {% else %}    
+            <strong>You have won this auction!</strong>
+
+    {% endif %} 
+<hr>
+<h4>Comments</h4>
+
+{% for comment in comments %}
+
+<ul>
+    {{ comment.comment_text }}
+    <br>
+    Comment posted by {{ comment.made_by }}, {{ comment.comment_creation_date }}
+    <hr>
+</ul>
+
+{% endfor %}
+
+<a href="{% url 'create_comment' listing_name %}">Leave a comment</a>
 
 {% endif %}
     

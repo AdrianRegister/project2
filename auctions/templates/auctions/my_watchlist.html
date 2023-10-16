@@ -14,10 +14,10 @@
             <div>{{ watched_item.item_watched.listing_description }}</div>
             <div>Starting price: ${{ watched_item.item_watched.starting_price }}. Listing posted by {{ watched_item.item_watched.listed_by }}.</div><br>
             
-            {% if listing.current_price == null %}
+            {% if watched_item.item_watched.current_price == 0.00 %}
                 <div>No bids yet!</div>
             {% else %}
-                <div>Current price: ${{ listing.current_price }}</div>  
+                <div>Current price: ${{ watched_item.item_watched.current_price }}. Bid placed by </div>  
             {% endif %}  
             <br>
         

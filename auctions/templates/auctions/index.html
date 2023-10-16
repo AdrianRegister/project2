@@ -11,16 +11,19 @@
                 <a href="{% url 'listing_info' listing.listing_name %}">{{ listing.listing_name }}</a> 
             </div>
             <div>{{ listing.listing_description }}</div>
-            <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}.</div><br>
+            <div>Starting price: ${{ listing.starting_price }}. Listing posted by {{ listing.listed_by }}</div><br>
 
-            {% if listing.current_price == null %}
+            {% if listing.current_price == 0.00 %}
                 <div>No bids yet!</div>
             {% else %}
                 <div>Current price: ${{ listing.current_price }}</div>   
             {% endif %}   
 
-            <br>
+            {% if listing.is_closed %}
+            <strong>Auction closed!</strong>
+            {% endif %}
         </li>
+        <br>
         {% endfor %}
     </ul>
 
