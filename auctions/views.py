@@ -60,8 +60,8 @@ def listing_info(request, listing_name):
         "comments": comments
     })
 
-def create_comment(request, listing_name):
-    listing = AuctionListing.objects.get(listing_name=listing_name)
+def create_comment(request, listing_pk):
+    listing = AuctionListing.objects.get(pk=listing_pk)
     if request.method == 'POST':
         comment_form = ListingCommentForm(request.POST)
         if comment_form.is_valid():
@@ -69,7 +69,8 @@ def create_comment(request, listing_name):
             comment_form.instance.on_listing = listing
             comment_form.save()        
     else:
-        comment_form = ListingCommentForm()    
+        comment_form = ListingCommentForm()
+
     return render(request, 'auctions/create_comment.html', {
         "comment_form": comment_form,
         "listing": listing
